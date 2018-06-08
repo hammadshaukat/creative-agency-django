@@ -1,0 +1,528 @@
+{% extends "base.html" %}
+{% load static %}
+{% load socialaccount %}
+
+{% block header %}
+
+    <header id="home">
+        <!-- Background Image -->
+        <div class="bg-img" style="background-image: url('{% static 'app/img/background1.jpg' %}');">
+            <div class="overlay"></div>
+        </div>
+        <!-- /Background Image -->
+
+        <!-- Nav -->
+        <nav id="nav" class="navbar nav-transparent">
+            <div class="container">
+
+                <div class="navbar-header">
+                    <!-- Logo -->
+                    <div class="navbar-brand">
+                        <a href="index.html">
+                            <img class="logo" src="{% static 'app/img/logo.png' %}" alt="logo">
+                            <img class="logo-alt" src="{% static 'app/img/logo-alt.png' %}" alt="logo">
+                        </a>
+                    </div>
+                    <!-- /Logo -->
+
+                    <!-- Collapse nav button -->
+                    <div class="nav-collapse">
+                        <span></span>
+                    </div>
+                    <!-- /Collapse nav button -->
+                </div>
+
+                <!--  Main navigation  -->
+                <ul class="main-nav nav navbar-nav navbar-right">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#service">Services</a></li>
+                    <li><a href="#pricing">Prices</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li class="has-dropdown"><a href="#blog">Blog</a>
+                        <ul class="dropdown">
+                            <li><a href="{% url "app:blog_view" %}">blog post</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#contact">Contact</a></li>
+                    {% if user.is_authenticated %}
+                        <li class="has-dropdown"><a href="#">Logged in as {{ user.username }}</a>
+                            <ul class="dropdown">
+                                <li><a href="{% url "account_logout" %}">Logout</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'account_login' %}">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <!-- /Main navigation -->
+
+            </div>
+        </nav>
+        <!-- /Nav -->
+
+        <!-- home wrapper -->
+        <div class="home-wrapper">
+            <div class="container">
+                <div class="row">
+
+                    <!-- home content -->
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="home-content">
+                            <h1 class="white-text">{{ home_customization.banner_heading }}</h1>
+                            <p class="white-text">{{ home_customization.banner_text }}
+                            </p>
+                            <button class="white-btn">Get Started!</button>
+                            <button class="main-btn">Learn more</button>
+                        </div>
+                    </div>
+                    <!-- /home content -->
+
+                </div>
+            </div>
+        </div>
+        <!-- /home wrapper -->
+
+    </header>
+{% endblock %}
+
+{% block content %}
+
+    <!-- About -->
+    <div id="about" class="section md-padding">
+
+        <!-- Container -->
+        <div class="container">
+
+            <!-- Row -->
+            <div class="row">
+
+                <!-- Section header -->
+                <div class="section-header text-center">
+                    <h2 class="title">{{ home_customization.welcome_note }}</h2>
+                </div>
+                <!-- /Section header -->
+
+                <!-- about -->
+                {% for about in about_list %}
+                    <div class="col-md-4">
+                        <div class="about">
+                            <img src="{{ about.icon.url }}">
+                            <h3>{{ about.title }}</h3>
+                            <p>{{ about.description }}</p>
+                            <a href="#">Read more</a>
+                        </div>
+                    </div>
+                {% endfor %}
+                <!-- /about -->
+
+            </div>
+            <!-- /Row -->
+
+        </div>
+        <!-- /Container -->
+
+    </div>
+    <!-- /About -->
+
+
+    <!-- Portfolio -->
+    <div id="portfolio" class="section md-padding bg-grey">
+
+        <!-- Container -->
+        <div class="container">
+
+            <!-- Row -->
+            <div class="row">
+
+                <!-- Section header -->
+                <div class="section-header text-center">
+                    <h2 class="title">{{ home_customization.featured_works_heading }}</h2>
+                </div>
+                <!-- /Section header -->
+
+                <!-- Work -->
+                {% for work in work_list %}
+                    <div class="col-md-4 col-xs-6 work">
+                        <img class="img-responsive" src="{{ work.image.url }}" alt="">
+                        <div class="overlay"></div>
+                        <div class="work-content">
+                            <span>{{ work.category }}</span>
+                            <h3>{{ work.title }}</h3>
+                            <div class="work-link">
+                                <a href="#"><i class="fa fa-external-link"></i></a>
+                                <a class="lightbox" href="{{ work.image.url }}"><i class="fa fa-search"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <!-- /Work -->
+
+            </div>
+            <!-- /Row -->
+
+        </div>
+        <!-- /Container -->
+
+    </div>
+    <!-- /Portfolio -->
+
+    <!-- Service -->
+    <div id="service" class="section md-padding">
+
+        <!-- Container -->
+        <div class="container">
+
+            <!-- Row -->
+            <div class="row">
+
+                <!-- Section header -->
+                <div class="section-header text-center">
+                    <h2 class="title">{{ home_customization.services_heading }}</h2>
+                </div>
+                <!-- /Section header -->
+
+                <!-- service -->
+                {% for service in service_list %}
+                    <div class="col-md-4 col-sm-6">
+                        <div class="service">
+                            <img src="{{ service.icon.url }}">
+                            <h3>{{ service.title }}</h3>
+                            <p>{{ service.description }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <!-- /service -->
+
+            </div>
+            <!-- /Row -->
+
+        </div>
+        <!-- /Container -->
+
+    </div>
+    <!-- /Service -->
+
+
+    <!-- Why Choose Us -->
+    <div id="features" class="section md-padding bg-grey">
+
+        <!-- Container -->
+        <div class="container">
+
+            <!-- Row -->
+            <div class="row">
+
+                <!-- why choose us content -->
+                <div class="col-md-6">
+                    <div class="section-header">
+                        <h2 class="title">{{ home_customization.why_choose_us_heading }}</h2>
+                    </div>
+                    <p>{{ home_customization.why_choose_us_text }}</p>
+                    {% for why_choose_us in why_choose_us_list %}
+                        <div class="feature">
+                            <i class="fa fa-check"></i>
+                            <p>{{ why_choose_us.text }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- /why choose us content -->
+
+                <!-- About slider -->
+                <div class="col-md-6">
+                    <div id="about-slider" class="owl-carousel owl-theme">
+                        {% for about_slider in about_slider_list %}
+                            <img class="img-responsive" src="{{ about_slider.image.url }}" alt="">
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- /About slider -->
+
+            </div>
+            <!-- /Row -->
+
+        </div>
+        <!-- /Container -->
+
+    </div>
+    <!-- /Why Choose Us -->
+
+
+    <!-- Numbers -->
+    <div id="numbers" class="section sm-padding">
+
+        <!-- Background Image -->
+        <div class="bg-img" style="background-image: url('{% static 'app/img/background2.jpg' %}');">
+            <div class="overlay"></div>
+        </div>
+        <!-- /Background Image -->
+
+        <!-- Container -->
+        <div class="container">
+
+            <!-- Row -->
+            <div class="row">
+
+                <!-- number -->
+                {% for number in numbers_list %}
+                    <div class="col-sm-3 col-xs-6">
+                        <div class="number">
+                            <img src="{{ number.icon.url }}">
+                            <h3 class="white-text"><span class="counter">{{ number.number }}</span></h3>
+                            <span class="white-text">{{ number.title }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+                <!-- /number -->
+
+            </div>
+            <!-- /Row -->
+
+        </div>
+        <!-- /Container -->
+
+    </div>
+    <!-- /Numbers -->
+
+    <!-- Pricing -->
+    <div id="pricing" class="section md-padding">
+
+        <!-- Container -->
+        <div class="container">
+
+            <!-- Row -->
+            <div class="row">
+
+                <!-- Section header -->
+                <div class="section-header text-center">
+                    <h2 class="title">{{ home_customization.pricing_table_heading }}</h2>
+                </div>
+                <!-- /Section header -->
+
+                <!-- pricing -->
+                {% for pricing in pricing_list %}
+                    <div class="col-sm-4">
+                        <div class="pricing">
+                            <div class="price-head">
+                                <span class="price-title">{{ pricing.title }}</span>
+                                <div class="price">
+                                    <h3>{{ pricing.amount }}<span class="duration">/{{ pricing.duration }}</span></h3>
+                                </div>
+                            </div>
+                            <ul class="price-content">
+                                {% for content in pricing.pricecontent_set.all %}
+                                    <li>
+                                        <p>{{ content.title }}</p>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <div class="price-btn">
+                                <button class="outline-btn">Purchase now</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <!-- /pricing -->
+
+            </div>
+            <!-- Row -->
+
+        </div>
+        <!-- /Container -->
+
+    </div>
+    <!-- /Pricing -->
+
+
+    <!-- Testimonial -->
+    <div id="testimonial" class="section md-padding">
+
+        <!-- Background Image -->
+        <div class="bg-img" style="background-image: url('{% static 'app/img/background3.jpg' %}');">
+            <div class="overlay"></div>
+        </div>
+        <!-- /Background Image -->
+
+        <!-- Container -->
+        <div class="container">
+
+            <!-- Row -->
+            <div class="row">
+
+                <!-- Testimonial slider -->
+                <div class="col-md-10 col-md-offset-1">
+                    <div id="testimonial-slider" class="owl-carousel owl-theme">
+
+                        <!-- testimonial -->
+                        {% for testimonual in testimonial_list %}
+                            <div class="testimonial">
+                                <div class="testimonial-meta">
+                                    <img src="{{ testimonual.photo.url }}" alt="">
+                                    <h3 class="white-text">{{ testimonual.name }}</h3>
+                                    <span>{{ testimonual.title }}</span>
+                                </div>
+                                <p class="white-text">{{ testimonual.text }}</p>
+                            </div>
+                        {% endfor %}
+                        <!-- /testimonial -->
+
+                    </div>
+                </div>
+                <!-- /Testimonial slider -->
+
+            </div>
+            <!-- /Row -->
+
+        </div>
+        <!-- /Container -->
+
+    </div>
+    <!-- /Testimonial -->
+
+    <!-- Team -->
+    <div id="team" class="section md-padding">
+
+        <!-- Container -->
+        <div class="container">
+
+            <!-- Row -->
+            <div class="row">
+
+                <!-- Section header -->
+                <div class="section-header text-center">
+                    <h2 class="title">{{ home_customization.our_team_heading }}</h2>
+                </div>
+                <!-- /Section header -->
+
+                <!-- team -->
+                {% for team in team_list %}
+                    <div class="col-sm-4">
+                        <div class="team">
+                            <div class="team-img">
+                                <img class="img-responsive" src="{{ team.photo.url }}" alt="">
+                                <div class="overlay">
+                                    <div class="team-social">
+                                        <a href="{{ team.facebook_url }}" target="_blank"><i class="fa fa-facebook"></i></a>
+                                        <a href="{{ team.google_url }}" target="_blank"><i
+                                                class="fa fa-google-plus"></i></a>
+                                        <a href="{{ team.twitter_url }}" target="_blank"><i
+                                                class="fa fa-twitter"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="team-content">
+                                <h3>{{ team.name }}</h3>
+                                <span>{{ team.title }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <!-- /team -->
+
+            </div>
+            <!-- /Row -->
+
+        </div>
+        <!-- /Container -->
+
+    </div>
+    <!-- /Team -->
+
+    <!-- Blog -->
+    <div id="blog" class="section md-padding bg-grey">
+
+        <!-- Container -->
+        <div class="container">
+
+            <!-- Row -->
+            <div class="row">
+
+                <!-- Section header -->
+                <div class="section-header text-center">
+                    <h2 class="title">{{ home_customization.recent_news_heading }}</h2>
+                </div>
+                <!-- /Section header -->
+
+                <!-- blog -->
+                {% for blog in blog_list %}
+                    <div class="col-md-4">
+                        <div class="blog">
+                            <div class="blog-img">
+                                <img class="img-responsive" src="{{ blog.image.url }}" alt="">
+                            </div>
+                            <div class="blog-content">
+                                <ul class="blog-meta">
+                                    <li><i class="fa fa-user"></i>{{ blog.author }}</li>
+                                    <li><i class="fa fa-clock-o"></i>{{ blog.publish_datetime }}</li>
+                                    <li><i class="fa fa-comments"></i>{{ blog.blogcomment_set.count }}</li>
+                                </ul>
+                                <h3>{{ blog.title }}</h3>
+                                <p>{{ blog.text }}</p>
+                                <a href="blog-single.html">Read more</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <!-- /blog -->
+
+            </div>
+            <!-- /Row -->
+
+        </div>
+        <!-- /Container -->
+
+    </div>
+    <!-- /Blog -->
+
+    <!-- Contact -->
+    <div id="contact" class="section md-padding">
+
+        <!-- Container -->
+        <div class="container">
+
+            <!-- Row -->
+            <div class="row">
+
+                <!-- Section-header -->
+                <div class="section-header text-center">
+                    <h2 class="title">{{ home_customization.get_in_touch_heading }}</h2>
+                </div>
+                <!-- /Section-header -->
+
+                <!-- contact -->
+                {% for contact_us in contact_us_list %}
+                    <div class="col-sm-4">
+                        <div class="contact">
+                            <img src="{{ contact_us.icon.url }}">
+                            <h3>{{ contact_us.contact_title }}</h3>
+                            <p>{{ contact_us.contact_detail }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <!-- /contact -->
+
+                <!-- contact form -->
+                <div class="col-md-8 col-md-offset-2">
+                    <form class="contact-form" method="post" enctype="multipart/form-data">
+                        <input type="text" class="input" placeholder="Name" name="name" id="id_name">
+                        <input type="email" class="input" placeholder="Email" name="email" id="id_email">
+                        <input type="text" class="input" placeholder="Subject" name="subject" id="id_subject">
+                        <textarea class="input" placeholder="Message" name="message" id="id_message"></textarea>
+                        <button type="submit" class="main-btn" value="Submit">Send message</button>
+                        {% csrf_token %}
+                    </form>
+                </div>
+                <!-- /contact form -->
+
+            </div>
+            <!-- /Row -->
+
+        </div>
+        <!-- /Container -->
+
+    </div>
+    <!-- /Contact -->
+
+{% endblock %}
